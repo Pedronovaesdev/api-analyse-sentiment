@@ -23,6 +23,27 @@ Resumo rápido:
 Observação: o uso de RabbitMQ melhora resiliência, desacoplamento e escalabilidade para alto volume de requisições.
 
 ---
+## Visão Geral da arquitetura
+
+```mermaid
+graph TD
+    User([Usuário / Cliente Frontend])
+    API[API FastAPI]
+    RabbitMQ(RabbitMQ Broker)
+    Worker[Worker / Consumer]
+    Model[[Modelo BERT Fine-tuned]]
+    DB[(PostgreSQL / Database)]
+
+    User -- "1. POST /sentimento/create" --> API
+    API -- "2. Publica Tarefa" --> RabbitMQ
+    API -.-> "3. Retorna 201 Created" --> User
+
+    RabbitMQ -- "4. Entrega Mensagem" --> Worker
+    Worker -- "5. Inferência (PyTorch)" --> Model
+    Worker -- "6. Persiste Resultado" --> DB
+```
+
+--- 
 
 ## 📦 Funcionalidades principais
 
