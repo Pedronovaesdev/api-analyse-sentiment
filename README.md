@@ -236,14 +236,3 @@ Sugestão: adicionar testes para mocks de chamadas à API BERT (httpx.MockTransp
 4. PR com descrição clara.
 
 ---
-
-## 📜 Licença
-
-Escolha a licença do projeto (ex.: MIT). Atualize o arquivo LICENSE no repositório.
-
----
-
-Se quiser, eu gero:
-- template de Dockerfile + docker-compose com worker e broker;
-- worker.py exemplo (consumer) com retry, DLQ e chamada ao BERT;
-- testes unitários exemplares para endpoints, mocks do BERT e integração com RabbitMQ.
