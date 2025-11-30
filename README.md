@@ -27,6 +27,7 @@ Observação: o uso de RabbitMQ melhora resiliência, desacoplamento e escalabil
 
 ```mermaid
 graph TD
+    %% Nós do Diagrama
     User([Usuário / Cliente Frontend])
     API[API FastAPI]
     RabbitMQ(RabbitMQ Broker)
@@ -34,16 +35,23 @@ graph TD
     Model[[Modelo BERT Fine-tuned]]
     DB[(PostgreSQL / Database)]
 
-    User -- "1. POST /sentimento/create" --> API
-    API -- "2. Publica Tarefa" --> RabbitMQ
-    API -.-> "3. Retorna 201 Created" --> User
+    %% Fluxo de Envio
+    User -- "1. Envia Texto (POST /sentimento/create)" --> API
+    API -- "2. Publica Mensagem na Fila" --> RabbitMQ
+    API -. "3. Retorna 'Queued' + ID" .-> User
 
-    RabbitMQ -- "4. Entrega Mensagem" --> Worker
-    Worker -- "5. Inferência (PyTorch)" --> Model
-    Worker -- "6. Persiste Resultado" --> DB
+    %% Fluxo de Processamento Assíncrono
+    RabbitMQ -- "4. Consome Mensagem" --> Worker
+    Worker -- "5. Realiza Inferência" --> Model
+    Model -- "6. Retorna Score/Sentimento" --> Worker
+    
+    %% Persistência
+    Worker -- "7. Salva Resultado" --> DB
 ```
 
---- 
+---
+
+## 📦 Funcionalidades principais
 
 ## 📦 Funcionalidades principais
 
